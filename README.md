@@ -5,6 +5,6 @@ This repositry aims to provide solution to those who are learning 8051 and using
 
 Codes are arranged in tree structure:
 
-    Library files are stored in Library/ folder.
+    Library files are stored in libraries/ folder.
 
-    Sample codes are stored in Source/ folder.
+    Sample codes are stored in source/ folder.
