@@ -1,0 +1,175 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        11/11/2017  14:46:36  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5\C51\BIN\BL51.EXE .\Objects\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD.obj TO .\Objects\19.1.2 RTCDS12887_ReadDa
+>> teTime24HBCD_LCD PRINT (.\Listings\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD.m51) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD.obj (19_1_2_RTCDS12887_READDATETIME24HBCD_LCD)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C_STARTUP)
+  C:\KEIL_V5\C51\LIB\C51S.LIB (?C?SLCMP)
+
+
+LINK MAP OF MODULE:  .\Objects\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD (19_1_2_RTCDS12887_READDATETIME24HBCD_LCD)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     0001H     UNIT         _DATA_GROUP_
+            IDATA   0009H     0001H     UNIT         ?STACK
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     07FDH                  *** GAP ***
+            CODE    0800H     0063H     UNIT         ?PR?MAIN?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+            CODE    0863H     0027H     UNIT         ?PR?_LCD_BCD?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+            CODE    088AH     0020H     UNIT         ?PR?DELAY?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+            CODE    08AAH     001CH     UNIT         ?PR?LCD_INIT?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+            CODE    08C6H     0016H     UNIT         ?C?LIB_CODE
+            CODE    08DCH     000CH     UNIT         ?C_C51STARTUP
+            CODE    08E8H     0006H     UNIT         ?PR?_LCD_COMMAND?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+            CODE    08EEH     0006H     UNIT         ?PR?_LCD_DATA?19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD (19_1_2_RTCDS12887_READDATETIME24HBCD_LCD)
+
+
+SEGMENT                                            DATA_GROUP 
+  +--> CALLED SEGMENT                            START    LENGTH
+----------------------------------------------------------------
+?C_C51STARTUP                                    -----    -----
+  +--> ?PR?MAIN?19_1_2_RTCDS12887_READDATETI...
+
+?PR?MAIN?19_1_2_RTCDS12887_READDATETI...         -----    -----
+  +--> ?PR?LCD_INIT?19_1_2_RTCDS12887_READDA...
+  +--> ?PR?_LCD_COMMAND?19_1_2_RTCDS12887_RE...
+  +--> ?PR?_LCD_BCD?19_1_2_RTCDS12887_READDA...
+  +--> ?PR?_LCD_DATA?19_1_2_RTCDS12887_READD...
+
+?PR?LCD_INIT?19_1_2_RTCDS12887_READDA...         -----    -----
+  +--> ?PR?_LCD_COMMAND?19_1_2_RTCDS12887_RE...
+  +--> ?PR?DELAY?19_1_2_RTCDS12887_READDATET...
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2017  14:46:36  PAGE 2
+
+
+?PR?_LCD_COMMAND?19_1_2_RTCDS12887_RE...         -----    -----
+  +--> ?PR?DELAY?19_1_2_RTCDS12887_READDATET...
+
+?PR?_LCD_BCD?19_1_2_RTCDS12887_READDA...         0008H    0001H
+  +--> ?PR?_LCD_DATA?19_1_2_RTCDS12887_READD...
+
+?PR?_LCD_DATA?19_1_2_RTCDS12887_READD...         -----    -----
+  +--> ?PR?DELAY?19_1_2_RTCDS12887_READDATET...
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\19.1.2 RTCDS12887_ReadDateTime24HBCD_LCD (19_1_2_RTCDS12887_READDATETIME24HBCD_LCD)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:00A0H         PUBLIC        P2
+  C:0890H         PUBLIC        delay
+  C:08E8H         PUBLIC        _LCD_command
+  B:00A0H.6       PUBLIC        RS
+  C:0800H         PUBLIC        main
+  B:00A0H.7       PUBLIC        E
+  C:08EEH         PUBLIC        _LCD_data
+  D:0080H         PUBLIC        LCD
+  C:08AAH         PUBLIC        LCD_init
+  C:0863H         PUBLIC        _LCD_BCD
+  -------         PROC          LCD_INIT
+  C:08AAH         LINE#         12
+  C:08AAH         LINE#         13
+  C:08ACH         LINE#         14
+  C:08AEH         LINE#         15
+  C:08B3H         LINE#         16
+  C:08B6H         LINE#         17
+  C:08BBH         LINE#         18
+  C:08BEH         LINE#         19
+  C:08C3H         LINE#         20
+  -------         ENDPROC       LCD_INIT
+  -------         PROC          _LCD_COMMAND
+  D:0007H         SYMBOL        cmd
+  C:08E8H         LINE#         23
+  C:08E8H         LINE#         24
+  C:08E8H         LINE#         25
+  C:08E8H         LINE#         26
+  C:08E8H         LINE#         27
+  C:08EBH         LINE#         28
+  C:08EDH         LINE#         29
+  -------         ENDPROC       _LCD_COMMAND
+  -------         PROC          _LCD_DATA
+  D:0007H         SYMBOL        dat
+  C:08EEH         LINE#         31
+  C:08EEH         LINE#         32
+  C:08EEH         LINE#         33
+  C:08EEH         LINE#         34
+  C:08EEH         LINE#         35
+  C:08F1H         LINE#         36
+BL51 BANKED LINKER/LOCATER V6.22                                                      11/11/2017  14:46:36  PAGE 3
+
+
+  C:08F3H         LINE#         37
+  -------         ENDPROC       _LCD_DATA
+  -------         PROC          _LCD_BCD
+  D:0008H         SYMBOL        BCD_num
+  C:0863H         LINE#         39
+  C:0865H         LINE#         40
+  C:0879H         LINE#         41
+  -------         ENDPROC       _LCD_BCD
+  -------         PROC          L?0016
+  -------         ENDPROC       L?0016
+  -------         PROC          DELAY
+  -------         DO            
+  D:0082H         SYMBOL        i
+  -------         ENDDO         
+  C:0890H         LINE#         44
+  C:0890H         LINE#         46
+  C:08A9H         LINE#         47
+  -------         ENDPROC       DELAY
+  -------         PROC          MAIN
+  C:0800H         LINE#         6
+  C:0800H         LINE#         7
+  C:0803H         LINE#         8
+  C:0809H         LINE#         9
+  C:0809H         LINE#         10
+  C:080EH         LINE#         11
+  C:0816H         LINE#         12
+  C:081BH         LINE#         13
+  C:0823H         LINE#         14
+  C:0828H         LINE#         15
+  C:0830H         LINE#         16
+  C:0835H         LINE#         17
+  C:083DH         LINE#         18
+  C:0842H         LINE#         19
+  C:084AH         LINE#         20
+  C:084FH         LINE#         21
+  C:0854H         LINE#         22
+  C:0859H         LINE#         23
+  C:0861H         LINE#         24
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        19_1_2_RTCDS12887_READDATETIME24HBCD_LCD
+
+  -------         MODULE        ?C?SLCMP
+  C:08C6H         PUBLIC        ?C?SLCMP
+  -------         ENDMOD        ?C?SLCMP
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 00D2H BYTE (10%) *
+******************************************************************************
+
+Program Size: data=10.0 xdata=0 code=247
+LINK/LOCATE RUN COMPLETE.  0 WARNING(S),  0 ERROR(S)

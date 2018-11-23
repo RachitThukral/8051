@@ -1,0 +1,38 @@
+;Program: Timer 0, Mode 0 – LED 1 blink 1s, Timer 1, Mode 1 – LED 2 blink 2s
+LED1 EQU P1.0
+LED2 EQU P1.1
+COUNT_TIMER0 EQU R0
+COUNT_TIMER1 EQU R1
+ORG 00H
+	MOV TMOD,#10H			;Timer 0,1 - mode 0,1(13,16-bit mode)
+	MOV COUNT_TIMER0,#224
+	MOV COUNT_TIMER1,#14
+	MOV TL0,#0C0H			;TL0=00H, low byte
+	MOV TH0,#00H			;TH0=00H, high byte
+	MOV TL1,#18H			;TL1=00H, low byte
+	MOV TH1,#02H			;TH1=00H, high byte
+	SETB TR0			;start the timer 0
+	SETB TR1			;start the timer 1
+MAIN:	JB TF0,TIMER0_COUNT
+	JB TF1,TIMER1_COUNT
+	SJMP HERE
+	
+TIMER0_COUNT:	CLR TR0	;stop timer 0
+	CLR TF0	;clear timer 0 flag
+	DJNZ COUNT_TIMER0,TIMER0
+	MOV COUNT_TIMER0,#224
+	CPL LED1
+TIMER0:	MOV TL0,#0C0H
+	MOV TH0,#00H
+	SETB TR0	;start the timer 0
+	AJMP MAIN
+TIMER1_COUNT:	CLR TR1	;stop timer 1
+	CLR TF1	;clear timer 1 flag
+	DJNZ COUNT_TIMER1,TIMER1
+	MOV COUNT_TIMER1,#14
+	CPL LED2
+TIMER1:	MOV TL1,#18H	;TL1=00H, low byte
+	MOV TH1,#02H	;TH1=00H, high byte
+	SETB TR1	;start the timer 1
+	AJMP MAIN
+END

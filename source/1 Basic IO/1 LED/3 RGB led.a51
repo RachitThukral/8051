@@ -1,0 +1,29 @@
+;Program: Generate Red, Blue, Green sequence in RGB LED
+LED_R EQU P2.0
+LED_G EQU P2.1
+LED_B EQU P2.2
+ORG 00H
+BLINK:
+	SETB LED_R			;Red colour
+	CLR LED_G
+	CLR LED_B
+	ACALL DELAY
+	CLR LED_R
+	SETB LED_G			;Green Colour
+	CLR LED_B
+	ACALL DELAY
+	CLR LED_R
+	CLR LED_G
+	SETB LED_B			;Blue Colour
+	ACALL DELAY
+	AJMP BLINK
+	
+DELAY:	;Function for delay
+		MOV R0, #10
+LOOP2:	MOV R1, #200
+LOOP1:	MOV R2, #200
+LOOP:	DJNZ R2, LOOP
+		DJNZ R1, LOOP1
+		DJNZ R0, LOOP2
+RET
+END

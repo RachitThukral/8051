@@ -1,0 +1,77 @@
+;Program: Count the number of times the switch is pressed at P1.0 (counter 2) and display on LCD
+E EQU P2.7
+RS EQU P2.6
+LCD EQU P0
+RCAP2L EQU 0CAH
+RCAP2H EQU 0CBH
+TL2 EQU 0CCH
+TH2 EQU 0CDH
+TR2 EQU 0CAH
+TF2 EQU 0CFH
+CP_RL2 EQU 0C8H
+C_T2 EQU 0C9H
+EXEN2 EQU 0CBH
+EXF2 EQU 0CEH
+ORG 00H
+	ACALL LCD_INIT
+	MOV TL2,#00H
+	MOV TH2,#00H
+	SETB C_T2	;counter 2
+	SETB TR2	;enable counter 2
+AGAIN:
+	MOV A,TL2	;convert counter value to ASCII
+	MOV B,#10	;and display on LCD
+	DIV AB
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	AJMP AGAIN
+
+LCD_INIT:
+	CLR E
+	CLR RS
+	MOV R4, #38H			;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH			;LCD ON, Cursor OFF
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H			;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+RET
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+DELAY:	;Function for delay
+		MOV R7, #200
+LOOP1:	MOV R6, #200
+LOOP:	DJNZ R6, LOOP
+		DJNZ R7, LOOP1
+RET
+END

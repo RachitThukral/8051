@@ -1,0 +1,39 @@
+;Program: Timer 0, INT0 pin – ultrasonic sensor (input pulse), LED ON if target out of range
+TRIG EQU P2.0
+ECHO EQU P3.2
+LED EQU P1.0
+ORG 00H
+MAIN:
+	CLR TRIG	;TRIG initially low
+	MOV TMOD,#01H	;timer 0, mode 1
+	MOV TL0,#0F5H
+	MOV TH0,#0FFH
+	SETB TRIG	;10uS pulse on TRIG
+	SETB TR0
+HERE:	JNB TF0,HERE
+	CLR TR0
+	CLR TF0
+	MOV TMOD,#09H	;timer 0, mode 1, INT pin
+	MOV TL0,#0
+	MOV TH0,#0
+	SETB TR0
+	CLR TRIG
+	
+HERE1:	JNB ECHO,HERE1	;wait for ECHO pulse
+HERE2:	JB ECHO,HERE2
+	CLR TR0
+	CLR C
+	MOV A,#7EH	;if ECHO pulse>35000uS,
+	SUBB A,TH0
+	JNC CHECK1
+	SJMP NOT_OK
+CHECK1:	JNZ OK
+	CLR C
+	MOV A,#02H
+	SUBB A,TL0
+	JNC OK
+NOT_OK:	CLR LED	;out of range
+	AJMP MAIN
+OK:	SETB LED	;in range
+	AJMP MAIN
+END

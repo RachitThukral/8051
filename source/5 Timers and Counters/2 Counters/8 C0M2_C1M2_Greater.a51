@@ -1,0 +1,134 @@
+;Program: Count the number of times the switch is pressed at P3.4 (counter 0, mode 2) and P3.5 (counter 1, mode 2) and display on LCD which is greater
+E EQU P0.1
+RS EQU P0.0
+LCD EQU P2
+ORG 00H
+	ACALL LCD_INIT
+	MOV R4, #'C'	;display "C1:   C2: "
+	ACALL LCD_DATA
+	MOV R4, #'1'
+	ACALL LCD_DATA
+	MOV R4, #':'
+	ACALL LCD_DATA
+	MOV R4, #89H
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'C'
+	ACALL LCD_DATA
+	MOV R4, #'2'
+	ACALL LCD_DATA
+	MOV R4, #':'
+	ACALL LCD_DATA
+	
+	MOV TMOD,#66H	;counter0,mode2, counter1, mode2
+	MOV TH0,#00H
+	MOV TH1,#00H
+	SETB TR0	;enable counter 0 and 1
+	SETB TR1
+HERE:
+	MOV R4, #83H	;convert C1 to ASCII
+	ACALL LCD_COMMAND	;display on LCD
+	MOV 30H,TL0
+	MOV A,TL0
+	MOV B,#10
+	DIV AB
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+		
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+SW2_DISPLAY:
+	MOV R4, #8CH	;convert C2 to ASCII
+	ACALL LCD_COMMAND	;display on LCD
+	MOV 31H,TL1
+	MOV A,TL1
+	MOV B,#10
+	DIV AB
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+		
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	
+	MOV A,30H	;check C1 or C2 is greater
+	CJNE A,31H,CHECK_GL	;and display corresponding sign
+	MOV R4, #87H
+	ACALL LCD_COMMAND
+	MOV R4, #'='
+	ACALL LCD_DATA
+	AJMP HERE
+CHECK_GL:	SUBB A,31H
+	JC C1_LESS
+	MOV R4, #87H
+	ACALL LCD_COMMAND
+	MOV R4, #'>'
+	ACALL LCD_DATA
+	AJMP HERE
+C1_LESS:	MOV R4, #87H
+	ACALL LCD_COMMAND
+	MOV R4, #'<'
+	ACALL LCD_DATA
+	AJMP HERE
+
+LCD_INIT:
+	CLR E
+	CLR RS
+	MOV R4, #38H	;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH	;LCD ON, Cursor ON, Cursor blink ON
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H	;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+RET
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+DELAY:	;Function for delay
+		MOV R7, #200
+LOOP1:	MOV R6, #200
+LOOP:	DJNZ R6, LOOP
+		DJNZ R7, LOOP1
+RET
+END

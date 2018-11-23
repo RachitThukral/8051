@@ -1,0 +1,79 @@
+;Program: Read characters from as external data memory (ROM) and display on LCD
+E EQU P3.5
+RS EQU P3.4
+LCD EQU P1
+ORG 00H
+	ACALL LCD_INIT
+MAIN:
+	MOV DPTR,#00H	;start address
+	MOV R0,#5	;count for number of bytes
+NEXT:	MOV R4, #01H
+	ACALL LCD_COMMAND
+	CLR A
+	MOVX A,@DPTR	;fetch bytes
+	INC DPTR	;next bytes
+	ACALL LCD_BIN3	;display on LCD
+	ACALL DELAY
+	ACALL DELAY
+	ACALL DELAY
+	ACALL DELAY
+	ACALL DELAY
+	DJNZ R0,NEXT
+HERE:	SJMP HERE
+
+LCD_INIT:
+	CLR E
+	CLR RS
+	MOV R4, #38H	;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH	;LCD ON, Cursor OFF
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H	;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+RET
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+
+LCD_BIN3: ;display binary number on LCD
+	MOV B,#10	;convert to ASCII
+	DIV AB	;and display on LCD
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+RET
+	
+DELAY:	;Function for delay
+		MOV R7, #200
+LOOP1:	MOV R6, #200
+LOOP:	DJNZ R6, LOOP
+		DJNZ R7, LOOP1
+RET
+END

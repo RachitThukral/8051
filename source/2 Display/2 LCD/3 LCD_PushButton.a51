@@ -1,0 +1,89 @@
+;Program: Take the input from 4 different PB and display a message corresponding to each button
+E EQU P2.7
+RS EQU P2.6
+LCD EQU P0
+PB1 EQU P3.2
+PB2 EQU P3.5
+PB3 EQU P3.6
+PB4 EQU P3.7
+ORG 00H
+MAIN:
+	SETB PB1	;Push Buttons as input
+	SETB PB2
+	SETB PB3
+	SETB PB4
+	CLR E
+	CLR RS
+	MOV R4, #38H	;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH	;LCD ON, Cursor OFF
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H	;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'B'	;Display "Button" on LCD first row
+	ACALL LCD_DATA
+	MOV R4, #'u'
+	ACALL LCD_DATA
+	MOV R4, #'t'
+	ACALL LCD_DATA
+	MOV R4, #'t'
+	ACALL LCD_DATA
+	MOV R4, #'o'
+	ACALL LCD_DATA
+	MOV R4, #'n'
+	ACALL LCD_DATA
+CHECK:	JB PB1, CHECK2	;Push Button 1
+	MOV R4, #87H			
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'1'	;Display 1
+	ACALL LCD_DATA
+	AJMP CHECK
+CHECK2:	JB PB2, CHECK3	;Push Button 2
+	MOV R4, #87H			
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'2'	;Display 2
+	ACALL LCD_DATA
+	AJMP CHECK
+CHECK3:	JB PB3, CHECK4	;Push Button 3
+	MOV R4, #87H			
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'3'	;Display 3
+	ACALL LCD_DATA
+	AJMP CHECK
+CHECK4:	JB PB4, CHECK	;Push Button 4
+	MOV R4, #87H			
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #'4'	;Display 4
+	ACALL LCD_DATA
+	AJMP CHECK
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+DELAY:	;Function for delay
+		MOV R1, #200
+LOOP1:	MOV R2, #200
+LOOP:	DJNZ R2, LOOP
+		DJNZ R1, LOOP1
+RET
+END

@@ -1,0 +1,111 @@
+;Program: Count the number of persons entering and leaving a hall (diff doors for entry and exit) using IR sensors connected at P3.4 (counter 0, mode 1) and P1.0(counter 2) and display persons present in hall on LCD
+E EQU P2.7
+RS EQU P2.6
+LCD EQU P0
+RCAP2L EQU 0CAH
+RCAP2H EQU 0CBH
+TL2 EQU 0CCH
+TH2 EQU 0CDH
+TR2 EQU 0CAH
+TF2 EQU 0CFH
+CP_RL2 EQU 0C8H
+C_T2 EQU 0C9H
+EXEN2 EQU 0CBH
+EXF2 EQU 0CEH
+ORG 00H
+	ACALL LCD_INIT
+	MOV R4, 'N'	;display "No of persons"
+	ACALL LCD_DATA
+	MOV R4, 'o'
+	ACALL LCD_DATA
+	MOV R4, ' '
+	ACALL LCD_DATA
+	MOV R4, 'o'
+	ACALL LCD_DATA
+	MOV R4, 'f'
+	ACALL LCD_DATA
+	MOV R4, ' '
+	ACALL LCD_DATA
+	MOV R4, 'p'
+	ACALL LCD_DATA
+	MOV R4, 'e'
+	ACALL LCD_DATA
+	MOV R4, 'r'
+	ACALL LCD_DATA
+	MOV R4, 's'
+	ACALL LCD_DATA
+	MOV R4, 'o'
+	ACALL LCD_DATA
+	MOV R4, 'n'
+	ACALL LCD_DATA
+	MOV R4, 's'
+	ACALL LCD_DATA
+	MOV TL2,#00H
+	MOV TH2,#00H
+	SETB C_T2	;counter 2
+	SETB TR2	;enable counter 2
+	MOV TMOD,#05H	;counter 0, mode 1
+	MOV TL0,#00H
+	MOV TH0,#00H
+	SETB TR0	;enable counter 0
+AGAIN:
+	MOV R4, #8CH
+	ACALL LCD_COMMAND
+	MOV A,TL0
+	CLR C
+	SUBB A,TL2	;calculate difference
+	MOV B,#10	;and display on LCD
+	DIV AB
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	AJMP AGAIN
+
+LCD_INIT:
+	CLR E
+	CLR RS
+	MOV R4, #38H	;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH	;LCD ON, Cursor OFF
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H	;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+RET
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV LCD, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+DELAY:	;Function for delay
+		MOV R7, #200
+LOOP1:	MOV R6, #200
+LOOP:	DJNZ R6, LOOP
+		DJNZ R7, LOOP1
+RET
+END

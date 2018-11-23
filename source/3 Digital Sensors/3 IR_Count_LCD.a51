@@ -1,0 +1,91 @@
+;Program: Count items using IR sensor and display on LCD
+IR EQU P2.0
+E EQU P2.7
+RS EQU P2.6
+LCD EQU P0
+ORG 00H
+	ACALL LCD_INIT
+	MOV R4, #'C'	;Display "Count" on LCD
+	ACALL LCD_DATA
+	MOV R4, #'o'
+	ACALL LCD_DATA
+	MOV R4, #'u'
+	ACALL LCD_DATA
+	MOV R4, #'n'
+	ACALL LCD_DATA
+	MOV R4, #'t'
+	ACALL LCD_DATA
+	MOV R4, #'='
+	ACALL LCD_DATA
+	SETB IR;	//IR as input
+	MOV R7,#0
+MAIN:
+	JNB IR,MAIN	;next item detected
+	MOV A,#30H
+	INC R7	;Increment Count
+	ADD A,R7	;Convert number to ASCII
+	MOV R4, #0x86
+	ACALL LCD_COMMAND
+	ACALL LCD_BIN3	;display count on LCD
+	MOV R6,#5	;small delay
+LOOP5:
+	ACALL DELAY
+	DJNZ R6,LOOP5
+	AJMP MAIN
+
+LCD_INIT:
+	CLR E
+	CLR RS
+	MOV R4, #38H	;Use 2 lines and 5×7 matrix for LCD
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #0CH	;LCD ON, Cursor OFF
+	ACALL LCD_COMMAND
+	ACALL DELAY
+	MOV R4, #01H	;LCD clear
+	ACALL LCD_COMMAND
+	ACALL DELAY
+RET
+
+LCD_BIN3: ;display binary number on LCD
+	MOV B,#10	;convert to ASCII
+	DIV AB	;and display on LCD
+	MOV R3,B
+	MOV B,#10
+	DIV AB
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,B
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+	MOV A,R3
+	ADD A,#30H
+	MOV R4, A
+	ACALL LCD_DATA
+RET
+
+LCD_COMMAND:	;Function for LCD command
+	CLR RS
+	MOV P2, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+LCD_DATA:	;Function for LCD data
+	SETB RS
+	MOV P2, R4
+	SETB E
+	ACALL DELAY
+	CLR E
+RET
+	
+DELAY:	;Function for delay
+		MOV R1, #200
+LOOP1:	MOV R2, #200
+LOOP:	DJNZ R2, LOOP
+		DJNZ R1, LOOP1
+RET
+END
